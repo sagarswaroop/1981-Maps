@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:property_map/models/user.dart';
@@ -35,29 +37,29 @@ class AuthServices {
       FirebaseUser user = result.user;
       _userFormFirbaseUser(user);
     } catch (e) {
-      print("Ther is some error in sign in $e");
-      // errorMessage(e);
-      errorMessage = "Check Network Connection";
+      errorMessage = "Please Check the Number";
     }
   }
 
   isphoneRegisterationException(AuthException exception) {
     print("exception is ${exception.message}");
-    errorMessage = "Please Try again";
+    errorMessage = "Check your Number";
   }
 
-  Future<void> verifyPhone(String mobileNo, BuildContext context) async {
+  Future verifyPhone(String mobileNo, BuildContext context) async {
     final PhoneCodeSent smsOTPSent = (String verId, [int forceCodeResend]) {
       this.verificationId = verId;
       smsOTPDialog(context).then((value) {
         print("Sign in successfully");
       });
+      errorMessage = "Otp send Successfully";
     };
     try {
       await _auth.verifyPhoneNumber(
           phoneNumber: mobileNo, // PHONE NUMBER TO SEND OTP
           codeAutoRetrievalTimeout: (String verId) {
             this.verificationId = verId;
+            return "OTP Code sent";
           },
           codeSent:
               smsOTPSent, // WHEN CODE SENT THEN WE OPEN DIALOG TO ENTER OTP.
@@ -66,7 +68,7 @@ class AuthServices {
           verificationFailed: isphoneRegisterationException);
     } catch (e) {
       print("try block error $e");
-      errorMessage = "Please try again";
+      return "Please try again after Some Time";
     }
   }
 
@@ -80,17 +82,31 @@ class AuthServices {
             content: Container(
               height: 85,
               child: Column(children: [
-                TextField(
-                  onChanged: (value) {
-                    this.smsOTP = value;
-                  },
+                Expanded(
+                  child: TextField(
+                    onChanged: (value) {
+                      this.smsOTP = value;
+                    },
+                  ),
                 ),
-                (errorMessage != ''
-                    ? Text(
-                        errorMessage,
-                        style: TextStyle(color: Colors.red),
-                      )
-                    : Container())
+                SizedBox(
+                  height: 10,
+                ),
+                Expanded(
+                  child: Center(
+                    heightFactor: 10.0,
+                    widthFactor: 10.0,
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+                Expanded(
+                    child: (errorMessage == ''
+                        ? Text(
+                            errorMessage,
+                            style: TextStyle(
+                                color: Colors.red, fontWeight: FontWeight.w400),
+                          )
+                        : Container()))
               ]),
             ),
             contentPadding: EdgeInsets.all(10),
@@ -125,7 +141,7 @@ class AuthServices {
       _userFormFirbaseUser(user);
     } catch (e) {
       print("There is some error in sign out $e");
-      errorMessage = "Try again after some time";
+      errorMessage = "Check the Number";
     }
   }
 }

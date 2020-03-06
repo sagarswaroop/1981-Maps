@@ -17,11 +17,11 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   String _userContact;
   bool loading = false;
+  bool isConnection = false;
 
   @override
   void initState() {
     super.initState();
-    checkInternetConnectivity();
   }
 
   checkInternetConnectivity() async {
@@ -31,15 +31,23 @@ class _LoginScreenState extends State<LoginScreen> {
       Toast.show("No internet Connection", context, duration: 3);
     } else if (result == ConnectivityResult.mobile ||
         result == ConnectivityResult.wifi) {
-      Toast.show("Network Access Successfully", context, duration: 3);
+      setState(() {
+        isConnection = true;
+        print("is connection is called $isConnection");
+      });
     }
   }
 
   void _validationSubmition(BuildContext context) async {
     var form = _formKey.currentState;
     if (form.validate()) {
-      checkInternetConnectivity();
-      _auth.verifyPhone(_userContact, context);
+      form.save();
+      if (isConnection) {
+        _auth.verifyPhone(_userContact, context).then((onValue) {
+          Toast.show(onValue ?? 'Checking', context, duration: 3);
+        });
+      } else
+        checkInternetConnectivity();
     }
   }
 
@@ -93,10 +101,41 @@ class _LoginScreenState extends State<LoginScreen> {
               return null;
             },
             onSaved: (no) => _userContact = ('+91' + no)),
+        SizedBox(
+          height: 10.0,
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            SizedBox(width: 40.0),
+            Icon(Icons.info, color: Colors.white, size: 25.0),
+            SizedBox(width: 10.0),
+            Expanded(
+              child: RichText(
+                  text: TextSpan(children: [
+                TextSpan(
+                    text: 'We will send ',
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.w400)),
+                TextSpan(
+                    text: 'One Time Password',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w700)),
+                TextSpan(
+                    text: ' to this mobile number',
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.w400)),
+              ])),
+            ),
+            SizedBox(width: 20.0),
+          ],
+        ),
         Container(
           margin: EdgeInsets.only(left: 80, right: 80),
           child: SizedBox(
-            height: 40,
+            height: 20,
             child: Divider(
               color: Colors.white,
             ),
@@ -107,11 +146,12 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Padding(
             padding: const EdgeInsets.only(bottom: 5),
             child: RaisedButton(
+              elevation: 2.0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
               color: Colors.blueAccent,
-              child: Text('Verify Yourself'),
+              child: Text('Send Otp'),
               onPressed: () {
                 _validationSubmition(context);
               },
