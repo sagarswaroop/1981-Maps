@@ -40,11 +40,9 @@ class CustomRegisterInputField extends StatelessWidget {
                 borderRadius: BorderRadius.circular(50),
                 borderSide: BorderSide(
                     width: 1.0, color: Colors.blue, style: BorderStyle.solid)),
-            // hintStyle: TextStyle(color: Colors.white),
             prefixIcon: prefix,
             labelText: labelText,
             hintText: hintText,
-            // labelStyle: TextStyle( color: Colors.white, decorationColor: Colors.white),
             suffix: suffix),
       ),
     );

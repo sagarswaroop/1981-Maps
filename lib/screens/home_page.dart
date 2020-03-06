@@ -1,16 +1,13 @@
-import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:network_to_file_image/network_to_file_image.dart';
 import 'package:property_map/cstmwidgets/caousalcard.dart';
 import 'package:property_map/cstmwidgets/image_view.dart';
 import 'package:property_map/cstmwidgets/tile_text.dart';
 import 'package:property_map/screens/constants.dart';
 import 'package:property_map/screens/print_sectors.dart';
 import 'package:property_map/services/datasharing.dart';
-import 'package:property_map/services/directoryservices.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -39,7 +36,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget getImage() {
-    int counter = 0;
     if (iskeyplans == false) {
       return Center(
           child: CircularProgressIndicator(backgroundColor: Colors.red));
@@ -50,16 +46,8 @@ class _HomePageState extends State<HomePage> {
           height: 350,
           initialPage: 0,
           items: keyPlans.map((key) {
-            File file;
-            getData() {
-              DirServices().file("loacliamge_${counter++}").then((File data) {
-                file = data;
-              });
-              return file;
-            }
-
             return new CarousalCard(
-              image: NetworkToFileImage(file: getData(), url: key, debug: true),
+              image: CachedNetworkImageProvider(key),
               onPressed: () {
                 setState(() {
                   Navigator.push(

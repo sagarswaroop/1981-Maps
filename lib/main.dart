@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:property_map/property.dart';
 import 'package:property_map/screens/aboutus_page.dart';
 import 'package:property_map/screens/allsector_page.dart';
-import 'package:property_map/screens/authentcation/login_page.dart';
-import 'package:property_map/screens/authentcation/register_page.dart';
 import 'package:property_map/screens/compass.dart';
 import 'package:property_map/screens/contactus_page.dart';
+import 'package:property_map/screens/login_screen.dart';
 import 'package:property_map/screens/sectormaps_page.dart';
 import 'package:property_map/screens/splash_screen.dart';
 import 'package:property_map/services/auth.dart';
@@ -29,8 +28,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         initialRoute: SplashScreen.id,
         routes: {
-          LoginScreen.id: (context) => LoginScreen(),
-          RegisterUser.id: (context) => RegisterUser(),
+          LoginScreen.id : (context) => LoginScreen(),
           AboutUs.id: (context) => AboutUs(),
           ContactUs.id: (context) => ContactUs(),
           Compass.id: (context) => Compass(),
