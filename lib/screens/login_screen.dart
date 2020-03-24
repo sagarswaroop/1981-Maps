@@ -42,17 +42,8 @@ class _LoginScreenState extends State<LoginScreen> {
     var form = _formKey.currentState;
     if (form.validate()) {
       form.save();
-<<<<<<< HEAD
-      if (isConnection) {
-        _auth.verifyPhone(_userContact, context).then((onValue) {
-          Toast.show(onValue ?? 'Checking', context, duration: 3);
-        });
-      } else
-        checkInternetConnectivity();
-=======
       checkInternetConnectivity();
       _auth.verifyPhone(_userContact, context);
->>>>>>> work_offline
     }
   }
 
