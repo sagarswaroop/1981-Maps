@@ -3,16 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:property_map/screens/constants.dart';
 import 'package:property_map/screens/print_sectors.dart';
 
-class AllSectors extends StatefulWidget {
+class AllSectors extends StatelessWidget {
   static String id = 'AllSectors';
-
-  @override
-  State<StatefulWidget> createState() {
-    return _AllSectorsState();
-  }
-}
-
-class _AllSectorsState extends State<AllSectors> {
 
   @override
   Widget build(BuildContext context) {

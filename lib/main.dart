@@ -8,7 +8,7 @@ import 'package:property_map/screens/login_screen.dart';
 import 'package:property_map/screens/sectormaps_page.dart';
 import 'package:property_map/screens/splash_screen.dart';
 import 'package:property_map/services/auth.dart';
-import 'package:property_map/utils/sharefeedback.dart';
+import 'package:property_map/services/sharefeedback.dart';
 import 'package:property_map/wrapper.dart';
 import 'package:provider/provider.dart';
 

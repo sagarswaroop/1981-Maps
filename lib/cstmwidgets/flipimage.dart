@@ -7,7 +7,6 @@ import 'package:property_map/screens/constants.dart';
 class FlipImage extends StatefulWidget {
   final int image;
   final List imageList;
-  // final String text;
 
   FlipImage({@required this.image,@required this.imageList});
 

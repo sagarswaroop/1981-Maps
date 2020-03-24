@@ -20,13 +20,6 @@ class _DispalySectorsState extends State<DispalySectors> {
   void initState() {
     super.initState();
   }
-
-  // void getMaps(String secName) async {
-  //   print('sector name is $secName');
-  //   data = await MapData(secName: secName).getData();
-  //   // print("afjejojeoifjioejofijeofje************$data");
-  // }
-
   Widget _gallaryCard(int index) {
     return GestureDetector(
       onTap: () {

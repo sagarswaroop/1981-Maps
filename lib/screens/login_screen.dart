@@ -42,12 +42,17 @@ class _LoginScreenState extends State<LoginScreen> {
     var form = _formKey.currentState;
     if (form.validate()) {
       form.save();
+<<<<<<< HEAD
       if (isConnection) {
         _auth.verifyPhone(_userContact, context).then((onValue) {
           Toast.show(onValue ?? 'Checking', context, duration: 3);
         });
       } else
         checkInternetConnectivity();
+=======
+      checkInternetConnectivity();
+      _auth.verifyPhone(_userContact, context);
+>>>>>>> work_offline
     }
   }
 
@@ -82,6 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _getFormUI() {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Image.asset("images/ic_launcher_web.png", height: 200, width: 200),
         SizedBox(
@@ -150,8 +156,8 @@ class _LoginScreenState extends State<LoginScreen> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
-              color: Colors.blueAccent,
-              child: Text('Send Otp'),
+              color: Colors.red[800],
+              child: Text('Verify Yourself'),
               onPressed: () {
                 _validationSubmition(context);
               },

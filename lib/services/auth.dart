@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:property_map/models/user.dart';
+import 'package:property_map/services/database.dart';
 import 'package:property_map/wrapper.dart';
 
 class AuthServices {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final LoadData loadData = LoadData();
   String smsOTP;
   String verificationId;
   String errorMessage = '';
@@ -32,9 +34,11 @@ class AuthServices {
   }
 
   Future isNumberVerified(AuthCredential credential) async {
+    print("Future isNumberVerified(AuthCredential credential) async ");
     try {
       AuthResult result = await _auth.signInWithCredential(credential);
       FirebaseUser user = result.user;
+      LoadData().getPlansData();
       _userFormFirbaseUser(user);
     } catch (e) {
       errorMessage = "Please Check the Number";

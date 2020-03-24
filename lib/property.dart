@@ -6,7 +6,7 @@ import 'package:property_map/screens/constants.dart';
 import 'package:property_map/screens/contactus_page.dart';
 import 'package:property_map/screens/home_page.dart';
 import 'package:property_map/services/auth.dart';
-import 'package:property_map/utils/sharefeedback.dart';
+import 'package:property_map/services/sharefeedback.dart';
 import 'package:share/share.dart';
 
 class Property extends StatefulWidget {

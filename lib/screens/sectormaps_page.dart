@@ -21,10 +21,10 @@ class _MapsState extends State<Maps> {
   @override
   void initState() {
     super.initState();
-    MapData(secName: widget.text).getData(this.initiliseData);
+    MapData(secName: widget.text).getSectorData(this.initiliseData);
   }
 
-  void initiliseData(List<MapModel> arr) {
+  initiliseData(List<MapModel> arr) {
     setState(() {
       this.mapList = arr;
       this.isList = true;

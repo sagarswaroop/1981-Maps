@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:property_map/cstmwidgets/customeloading.dart';
@@ -7,7 +5,6 @@ import 'package:property_map/cstmwidgets/image_view.dart';
 import 'package:property_map/services/cachImage.dart';
 
 class Map extends StatefulWidget {
-  
   final String mapName;
   final String mapUrl;
   bool isList;
@@ -19,8 +16,6 @@ class Map extends StatefulWidget {
 }
 
 class _MapState extends State<Map> {
-  Uint8List imageUrl;
-
   @override
   void initState() {
     super.initState();
@@ -35,6 +30,7 @@ class _MapState extends State<Map> {
   }
 
   Widget decideGridTile(String mapName, String urlName) {
+    print("map name is $mapName & and url is $urlName");
     return Container(
       padding: EdgeInsets.all(10.0),
       child: Card(
@@ -49,15 +45,16 @@ class _MapState extends State<Map> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => ImageView(
-                                image: CachedNetworkImageProvider(widget.mapUrl),
+                                image:
+                                    CachedNetworkImageProvider(widget.mapUrl),
                                 text: widget.mapName,
                               )));
                 });
               },
               child: GridTile(
                   footer: Container(
-                    padding: EdgeInsets.only(left: 50),
-                    color: Colors.black54,
+                    padding: EdgeInsets.only(left: 20),
+                    color: Colors.black38,
                     child: ListTile(
                       leading: Text(
                         widget.mapName,

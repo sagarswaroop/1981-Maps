@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +6,7 @@ import 'package:property_map/cstmwidgets/image_view.dart';
 import 'package:property_map/cstmwidgets/tile_text.dart';
 import 'package:property_map/screens/constants.dart';
 import 'package:property_map/screens/print_sectors.dart';
-import 'package:property_map/services/datasharing.dart';
+import 'package:property_map/services/directoryservices.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -17,20 +16,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final popularSec = ["sec-34", "sec-36", "sec-37"];
+  final popularSec = ["Sec-34", "Sec-36", "Sec-37"];
   bool iskeyplans = false;
   List keyPlans = [];
 
   @override
   void initState() {
     super.initState();
-    MapData(secName: "keymaps").getKeyPlans(this.getkeyPlans);
+    DirServices().loadKeyPlans(this.getkeyPlans);
   }
 
   void getkeyPlans(List arr) {
     setState(() {
       keyPlans = arr;
-      // navBar = Navbar(keyplans: arr);
       iskeyplans = true;
     });
   }

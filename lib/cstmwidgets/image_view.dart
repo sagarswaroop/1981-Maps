@@ -40,20 +40,7 @@ class _ImageViewState extends State<ImageView> {
               // initialScale: 3.0,
 
               imageProvider: widget.image),
-        ), 
-        // PhotoViewGallery.builder(
-        //   itemCount: 3,
-        //   builder: (context, index) {
-        //     return PhotoViewGalleryPageOptions(
-        //       imageProvider: AssetImage(widget.image),
-        //       minScale: PhotoViewComputedScale.contained * 0.8,);
-        //   },
-        //   scrollPhysics: BouncingScrollPhysics(),
-        //   loadingChild: Center(
-        //     child: CircularProgressIndicator(),
-        //   ),
-        // )
-        
+        ),
       );
   }
 }

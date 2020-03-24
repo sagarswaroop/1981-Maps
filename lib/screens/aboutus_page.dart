@@ -9,15 +9,13 @@ class AboutUs extends StatelessWidget {
     return Container(
         
         decoration: BoxDecoration(
-
           gradient: LinearGradient(
           colors: <Color>[Colors.orangeAccent, secondColor],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter
           )
         ),
-        child: Column(
-        // crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: ListView(
         children: <Widget>[
           Container(
               child: Image(
