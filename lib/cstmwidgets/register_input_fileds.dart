@@ -10,6 +10,8 @@ class CustomRegisterInputField extends StatelessWidget {
   final Widget suffix;
   final String hintText;
   final Function onSaved;
+  final Function onFieldSubmitted;
+  final Function onTap;
 
   CustomRegisterInputField(
       {this.controller,
@@ -20,13 +22,17 @@ class CustomRegisterInputField extends StatelessWidget {
       this.obscureText = false,
       this.suffix,
       this.hintText,
-      this.onSaved});
+      this.onSaved,
+      this.onFieldSubmitted,
+      this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 20),
       child: TextFormField(
+        onFieldSubmitted: onFieldSubmitted,
+        onTap: onTap,
         onSaved: onSaved,
         validator: validator,
         obscureText: obscureText,

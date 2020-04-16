@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:property_map/cstmwidgets/customeloading.dart';
@@ -10,6 +12,8 @@ class LoginScreen extends StatefulWidget {
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
+
+  loadMessage() {}
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -42,8 +46,10 @@ class _LoginScreenState extends State<LoginScreen> {
     var form = _formKey.currentState;
     if (form.validate()) {
       form.save();
-      checkInternetConnectivity();
-      _auth.verifyPhone(_userContact, context);
+      if (isConnection == false) {
+        checkInternetConnectivity();
+      } else
+        _auth.verifyPhone(_userContact, context);
     }
   }
 
@@ -88,6 +94,9 @@ class _LoginScreenState extends State<LoginScreen> {
             labelText: 'Mobile Number',
             hintText: 'Enter Your Mobile Number',
             keyboardType: TextInputType.phone,
+            onTap: () {
+              _validationSubmition(context);
+            },
             prefix: Icon(Icons.phone),
             validator: (number) {
               if (number == '') {

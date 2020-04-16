@@ -24,6 +24,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     DirServices().loadKeyPlans(this.getkeyPlans);
+    
   }
 
   void getkeyPlans(List arr) {

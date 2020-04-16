@@ -3,8 +3,12 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:property_map/models/user.dart';
+import 'package:property_map/screens/login_screen.dart';
+import 'package:property_map/screens/otpScreen.dart';
 import 'package:property_map/services/database.dart';
+import 'package:property_map/services/mailServices.dart';
 import 'package:property_map/wrapper.dart';
+import 'package:toast/toast.dart';
 
 class AuthServices {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -12,6 +16,7 @@ class AuthServices {
   String smsOTP;
   String verificationId;
   String errorMessage = '';
+  bool isVerified = false;
 
   User _userFormFirbaseUser(FirebaseUser user) {
     return user != null ? User(uid: user.uid) : null;
@@ -33,29 +38,10 @@ class AuthServices {
     }
   }
 
-  Future isNumberVerified(AuthCredential credential) async {
-    print("Future isNumberVerified(AuthCredential credential) async ");
-    try {
-      AuthResult result = await _auth.signInWithCredential(credential);
-      FirebaseUser user = result.user;
-      LoadData().getPlansData();
-      _userFormFirbaseUser(user);
-    } catch (e) {
-      errorMessage = "Please Check the Number";
-    }
-  }
-
-  isphoneRegisterationException(AuthException exception) {
-    print("exception is ${exception.message}");
-    errorMessage = "Check your Number";
-  }
-
   Future verifyPhone(String mobileNo, BuildContext context) async {
     final PhoneCodeSent smsOTPSent = (String verId, [int forceCodeResend]) {
       this.verificationId = verId;
-      smsOTPDialog(context).then((value) {
-        print("Sign in successfully");
-      });
+      smsOTPDialog(context, mobileNo);
       errorMessage = "Otp send Successfully";
     };
     try {
@@ -63,20 +49,32 @@ class AuthServices {
           phoneNumber: mobileNo, // PHONE NUMBER TO SEND OTP
           codeAutoRetrievalTimeout: (String verId) {
             this.verificationId = verId;
-            return "OTP Code sent";
           },
+          timeout: Duration(seconds: 60),
+          verificationCompleted: (AuthCredential credential) async {
+            try {
+              AuthResult result = await _auth.signInWithCredential(credential);
+              FirebaseUser user = result.user;
+              Navigator.of(context).pop();
+              LoadData().getPlansData();
+              _userFormFirbaseUser(user);
+              mail(mobileNo);
+            } catch (e) {
+              Toast.show("Please Check the Number", context, duration: 3);
+            }
+          }, //When Number is verified.
           codeSent:
               smsOTPSent, // WHEN CODE SENT THEN WE OPEN DIALOG TO ENTER OTP.
-          timeout: Duration(seconds: 60),
-          verificationCompleted: isNumberVerified,
-          verificationFailed: isphoneRegisterationException);
+          verificationFailed: (AuthException exception) {
+            print("exception is ${exception.message}");
+            Toast.show("Please Try with Another Number", context, duration: 3);
+          });
     } catch (e) {
       print("try block error $e");
-      return "Please try again after Some Time";
     }
   }
 
-  Future<bool> smsOTPDialog(BuildContext context) {
+  smsOTPDialog(BuildContext context, String conNumber) {
     return showDialog(
         context: context,
         barrierDismissible: false,
@@ -84,7 +82,7 @@ class AuthServices {
           return new AlertDialog(
             title: Text('Enter SMS Code'),
             content: Container(
-              height: 85,
+              height: 100,
               child: Column(children: [
                 Expanded(
                   child: TextField(
@@ -96,44 +94,44 @@ class AuthServices {
                 SizedBox(
                   height: 10,
                 ),
-                Expanded(
-                  child: Center(
-                    heightFactor: 10.0,
-                    widthFactor: 10.0,
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
-                Expanded(
-                    child: (errorMessage == ''
-                        ? Text(
-                            errorMessage,
-                            style: TextStyle(
-                                color: Colors.red, fontWeight: FontWeight.w400),
-                          )
-                        : Container()))
+                OtpReader(),
               ]),
             ),
             contentPadding: EdgeInsets.all(10),
             actions: <Widget>[
-              FlatButton(
-                child: Text('Done'),
-                onPressed: () {
-                  _auth.currentUser().then((user) {
-                    if (user != null) {
+              Row(
+                children: <Widget>[
+                  FlatButton(
+                    child: Text('Done'),
+                    onPressed: () {
+                      _auth.currentUser().then((user) {
+                        if (user != null) {
+                          mail(conNumber);
+                          Navigator.of(context).pop();
+                          Navigator.pushReplacementNamed(context, Wrapper.id);
+                        } else {
+                          signIn(context, conNumber);
+                        }
+                      });
+                    },
+                  ),
+                  SizedBox(
+                    width: 150,
+                  ),
+                  FlatButton(
+                    child: Text('cancel'),
+                    onPressed: () {
                       Navigator.of(context).pop();
-                      Navigator.pushReplacementNamed(context, Wrapper.id);
-                    } else {
-                      signIn(context);
-                    }
-                  });
-                },
+                    },
+                  )
+                ],
               )
             ],
           );
         });
   }
 
-  signIn(BuildContext context) async {
+  signIn(BuildContext context, String conNumber) async {
     try {
       final AuthCredential credential = PhoneAuthProvider.getCredential(
         verificationId: verificationId,
@@ -141,11 +139,14 @@ class AuthServices {
       );
       AuthResult result = await _auth.signInWithCredential(credential);
       FirebaseUser user = result.user;
-      Navigator.of(context).pop();
+      if(user!= null){
+       Navigator.of(context).pop();
       _userFormFirbaseUser(user);
+      mail(conNumber);
+      }
+      
     } catch (e) {
       print("There is some error in sign out $e");
-      errorMessage = "Check the Number";
     }
   }
 }
