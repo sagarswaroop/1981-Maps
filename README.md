@@ -1,6 +1,6 @@
 # property_map
 
-A new Flutter project. wehre a user log in with phone no and use can see their plots on maps.
+A new Flutter project. wehre a user log in with phone no and user can see their plots on maps. This application shows the maps of rohini delhi. It has selected maps only.
 
 ## Getting Started
 
